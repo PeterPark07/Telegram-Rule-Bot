@@ -24,8 +24,8 @@ def telegram():
     
 @bot.message_handler(func=lambda message: True)
 def images(message):
-    input_text = message.text.split(' ')[0]
-    global url
+    input_text = message.text.split()[0]
+
     local_url = url + f'index.php?page=post&s=list&tags={input_text}'
     bot.reply_to(message, local_url)
     response = requests.get(local_url, headers=headers)
@@ -55,18 +55,18 @@ def images(message):
             bot.reply_to(message, links)
             images = []
             for i in links:
-            # Send a request to the absolute URL
-            img_response = requests.get(i, headers=headers)
-            if img_response.status_code == 200:
-                img_soup = BeautifulSoup(img_response.text, 'html.parser')
+                # Send a request to the absolute URL
+                img_response = requests.get(i, headers=headers)
+                if img_response.status_code == 200:
+                    img_soup = BeautifulSoup(img_response.text, 'html.parser')
 
-                # Find all <img> tags with id="image"
-                img_tags = img_soup.find_all('img', id='image')
-                for img in img_tags:
-                    # Remove the query string from the image URL
-                    img_src = img['src'].split('?', 1)[0]
+                    # Find all <img> tags with id="image"
+                    img_tags = img_soup.find_all('img', id='image')
+                    for img in img_tags:
+                        # Remove the query string from the image URL
+                        img_src = img['src'].split('?', 1)[0]
 
-                    images.append(img_src)
+                        images.append(img_src)
             bot.send_photo(message.chat.id, images[0])
             else:
                 print(f"Failed to fetch website: {absolute_url}")
