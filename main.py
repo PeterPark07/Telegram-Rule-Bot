@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import os
 from flask import Flask, request
 import telebot
+import time
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
@@ -12,6 +13,8 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
     'Accept-Language': 'en-US,en;q=0.9',
 }
+
+message_ids = []  # List to store message IDs
 
 @app.route('/', methods=['POST'])
 def telegram():
@@ -66,10 +69,18 @@ def images(message):
                         images.append(img_src)
             if len(images) != 0:
                 for img_url in images:
-                    bot.send_photo(message.chat.id, img_url)
+                    sent_message = bot.send_photo(message.chat.id, img_url)
+                    message_ids.append(sent_message.message_id)  # Store the message ID
             else:
                 bot.reply_to(message, "No results")
         else:
             bot.reply_to(message, "No results")
     else:
         bot.reply_to(message, "Failed to fetch website")
+
+    # Schedule the deletion of sent messages after 10 seconds
+    time.sleep(10)
+    for message_id in message_ids:
+        bot.delete_message(message.chat.id, message_id)
+    message_ids.clear()  # Clear the list of message IDs
+
