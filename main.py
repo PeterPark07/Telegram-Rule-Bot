@@ -39,12 +39,11 @@ def images(message):
 
         # Step 6: Find all the <img> tags in the HTML
         img_tags = soup.find_all('img')
-
+        links = ""
         # Step 7: Extract the src attribute from each img tag and display them
         for img in img_tags:
             src = img.get('src')
             absolute_url = requests.compat.urljoin(url, src)
-            links = ""
             links += absolute_url
             links += '\n'
         bot.reply_to(message , links)
