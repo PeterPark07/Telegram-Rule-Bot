@@ -35,19 +35,20 @@ def images(message):
         # Step 5: Create a BeautifulSoup object to parse the HTML
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Step 6: Find all the <img> tags in the HTML
-        img_tags = soup.find_all('img')
         links = ""
         counter = 0  # Counter variable for limiting the number of links
 
-        # Step 7: Extract the src attribute from each img tag and display them
-        for img in img_tags:
-            src = img.get('src')
-            absolute_url = requests.compat.urljoin(local_url, src)
-            links += absolute_url
-            links += '\n'
-            counter += 1  # Increment the counter
+        # Step 5: Find all the <a> tags in the HTML
+        a_tags = soup.find_all('a')
 
+        # Step 6: Extract the href attribute from each <a> tag and display it
+        for a in a_tags:
+            href = a.get('href')
+            if 's=view' in href:
+                absolute_url = requests.compat.urljoin(url, href)
+                links += absolute_url
+                links += '\n'
+                counter += 1  # Increment the counter
             if counter == 10:  # Break the loop when counter reaches 10
                 break
 
