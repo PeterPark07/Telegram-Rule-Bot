@@ -64,12 +64,12 @@ def images(message):
                         img_src = img['src'].split('?', 1)[0]
 
                         images.append(img_src)
-            if len(images)!= 0 :
-                for i in images:
-                    bot.send_photo(message.chat.id, images[i])
+            if len(images) != 0:
+                for img_url in images:
+                    bot.send_photo(message.chat.id, img_url)
             else:
-                bot.reply_to(message, "Failed to fetch website")
+                bot.reply_to(message, "No results")
         else:
-            bot.reply_to(message, "no results")
+            bot.reply_to(message, "No results")
     else:
         bot.reply_to(message, "Failed to fetch website")
