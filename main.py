@@ -7,7 +7,6 @@ import telebot
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
-org_url = url
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
@@ -27,10 +26,9 @@ def telegram():
 def images(message):
     input_text = message.text.split(' ')[0]
     global url
-    url = url + f'index.php?page=post&s=list&tags={input_text}'
-    bot.reply_to(message , url)
-    response = requests.get(url, headers=headers)
-    url = org_url
+    local_url = url + f'index.php?page=post&s=list&tags={input_text}'
+    bot.reply_to(message , local_url)
+    response = requests.get(local_url, headers=headers)
 
     # Step 4: Check if the request was successful (status code 200)
     if response.status_code == 200:
@@ -43,9 +41,9 @@ def images(message):
         # Step 7: Extract the src attribute from each img tag and display them
         for img in img_tags:
             src = img.get('src')
-            absolute_url = requests.compat.urljoin(url, src)
+            absolute_url = requests.compat.urljoin(local_url, src)
             links += absolute_url
             links += '\n'
         bot.reply_to(message , links)
     else:
-        print(f"Failed to fetch website: {url}")
+        bot.reply_to(message , f"Failed to fetch website")
