@@ -20,8 +20,6 @@ def telegram():
         bot.process_new_updates([telebot.types.Update.de_json(request.get_data().decode('utf-8'))])
         return 'OK', 200
 
-    
-    
 @bot.message_handler(func=lambda message: True)
 def images(message):
     input_text = message.text.split()[0]
@@ -54,7 +52,7 @@ def images(message):
         if links != "":
             bot.reply_to(message, links)
             images = []
-            for i in links:
+            for i in links.splitlines():
                 # Send a request to the absolute URL
                 img_response = requests.get(i, headers=headers)
                 if img_response.status_code == 200:
@@ -67,11 +65,11 @@ def images(message):
                         img_src = img['src'].split('?', 1)[0]
 
                         images.append(img_src)
-            bot.send_photo(message.chat.id, images[0])
+            if images:
+                bot.send_photo(message.chat.id, images[0])
             else:
-                print(f"Failed to fetch website: {absolute_url}")
+                bot.reply_to(message, "Failed to fetch website")
         else:
             bot.reply_to(message, "no results")
     else:
         bot.reply_to(message, "Failed to fetch website")
-
