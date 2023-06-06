@@ -33,7 +33,7 @@ def images(message):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         links = ""
-        counter = 30
+        counter =10
 
         a_tags = soup.find_all('a')
 
