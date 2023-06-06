@@ -8,6 +8,7 @@ import time
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
+mode = False
 last_message_id = None
 
 headers = {
@@ -24,6 +25,13 @@ def telegram():
         bot.process_new_updates([telebot.types.Update.de_json(request.get_data().decode('utf-8'))])
         return 'OK', 200
 
+@bot.message_handler(commands=['mode'])
+def handle_on(message):
+    global mode
+    mode = not mode
+    # Handle the /on command
+    bot.reply_to(message, "Mode chaged")
+    
 @bot.message_handler(func=lambda message: True)
 def images(message):
     global last_message_id
@@ -37,7 +45,7 @@ def images(message):
     
     input_text = message.text.replace(' ', '_')
 
-    local_url = url + f'index.php?page=post&s=list&tags={input_text}'
+    local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
     response = requests.get(local_url, headers=headers)
 
     if response.status_code == 200:
@@ -92,8 +100,15 @@ def send_images(chat_id, images, message_ids):
 
         
 def schedule_message_deletion(message, message_ids):
-    time.sleep(60)
-    for message_id in message_ids:
-        time.sleep(2)
-        bot.delete_message(message.chat.id, message_id)
-    message_ids.clear()
+    if mode == False:
+        time.sleep(60)
+        for message_id in message_ids:
+            time.sleep(2)
+            bot.delete_message(message.chat.id, message_id)
+        message_ids.clear()
+    else:
+        time.sleep(20)
+        for message_id in message_ids:
+            time.sleep(1)
+            bot.delete_message(message.chat.id, message_id)
+        message_ids.clear()
