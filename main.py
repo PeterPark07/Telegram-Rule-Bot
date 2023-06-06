@@ -7,6 +7,7 @@ import telebot
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
+org_url = url
 
 @app.route('/', methods=['POST'])
 def telegram():
@@ -17,10 +18,11 @@ def telegram():
 
 @bot.message_handler(func=lambda message: True)
 def images(message):
-    input_text = message.text.strip()[0]
+    input_text = message.text.strip(' ')[0]
     global url
     url = url + f'index.php?page=post&s=list&tags={input_text}'
     bot.reply_to(message , url)
+    url = org_url
     
 
 # Step 2: Set the headers
