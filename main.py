@@ -59,6 +59,7 @@ def images(message):
         bot.reply_to(message, "Failed to fetch website")
 
     schedule_message_deletion(message, message_ids)
+    return
 
     
 def get_image_urls(links):
