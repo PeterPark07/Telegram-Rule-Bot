@@ -58,7 +58,7 @@ def images(message):
     else:
         bot.reply_to(message, "Failed to fetch website")
 
-    schedule_message_deletion(message_ids)
+    schedule_message_deletion(message, message_ids)
 
     
 def get_image_urls(links):
@@ -80,7 +80,7 @@ def send_images(chat_id, images, message_ids):
         message_ids.append(sent_message.message_id)
 
         
-def schedule_message_deletion(message_ids):
+def schedule_message_deletion(message, message_ids):
     time.sleep(10)
     for message_id in message_ids:
         bot.delete_message(message.chat.id, message_id)
