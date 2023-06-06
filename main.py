@@ -33,7 +33,7 @@ def images(message):
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         links = ""
-        counter = 10
+        counter = 30
 
         a_tags = soup.find_all('a')
 
@@ -81,7 +81,8 @@ def send_images(chat_id, images, message_ids):
 
         
 def schedule_message_deletion(message, message_ids):
-    time.sleep(10)
+    time.sleep(30)
     for message_id in message_ids:
+        time.sleep(1)
         bot.delete_message(message.chat.id, message_id)
     message_ids.clear()
