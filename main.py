@@ -6,7 +6,7 @@ import telebot
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
-bot.set_webhook(url=os.getenv('url2'))
+url = os.getenv('url')
 
 @app.route('/', methods=['POST'])
 def telegram():
@@ -15,9 +15,13 @@ def telegram():
         bot.process_new_updates([telebot.types.Update.de_json(request.get_data().decode('utf-8'))])
         return 'OK', 200
 
-
-# Step 1: Get the URL from the user
-url = os.getenv('url')
+@bot.message_handler(func=lambda message: True)
+def images(message):
+    input_text = message.text.strip()[0]
+    global url
+    url = url + f'index.php?page=post&s=list&tags={input_text}'
+    bot.reply_to(message , url)
+    
 
 # Step 2: Set the headers
 headers = {
