@@ -25,7 +25,7 @@ def telegram():
     
 @bot.message_handler(func=lambda message: True)
 def images(message):
-    input_text = message.text.strip(' ')[0]
+    input_text = message.text.split(' ')[0]
     global url
     url = url + f'index.php?page=post&s=list&tags={input_text}'
     bot.reply_to(message , url)
