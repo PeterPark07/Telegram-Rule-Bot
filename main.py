@@ -8,7 +8,7 @@ import time
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
-mode = False
+mode = True
 last_message_id = None
 
 headers = {
