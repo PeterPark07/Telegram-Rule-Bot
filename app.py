@@ -1,5 +1,5 @@
 import requests
-
+import os
 # Step 1: Get the URL from the user
 url = os.getenv('url')
 
