@@ -26,7 +26,7 @@ def telegram():
 def images(message):
     input_text = message.text.split(' ')[0]
     global url
-    local_url = url + f'/index.php?page=post&s=list&tags={input_text}'
+    local_url = url + f'index.php?page=post&s=list&tags={input_text}'
     bot.reply_to(message, local_url)
     response = requests.get(local_url, headers=headers)
 
