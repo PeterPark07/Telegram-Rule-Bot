@@ -25,7 +25,6 @@ def images(message):
     input_text = message.text.split()[0]
 
     local_url = url + f'index.php?page=post&s=list&tags={input_text}'
-    bot.reply_to(message, local_url)
     response = requests.get(local_url, headers=headers)
 
     # Step 4: Check if the request was successful (status code 200)
@@ -65,8 +64,9 @@ def images(message):
                         img_src = img['src'].split('?', 1)[0]
 
                         images.append(img_src)
-            if images:
-                bot.send_photo(message.chat.id, images[0])
+            if len(images)!= 0 :
+                for i in images:
+                    bot.send_photo(message.chat.id, images[i])
             else:
                 bot.reply_to(message, "Failed to fetch website")
         else:
