@@ -8,6 +8,7 @@ import time
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
+last_message_id = None
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
@@ -25,6 +26,15 @@ def telegram():
 
 @bot.message_handler(func=lambda message: True)
 def images(message):
+    global last_message_id
+
+    # Check if this is the same message as the previous one
+    if last_message_id == message.message_id:
+        return
+
+    # Store the current message ID as the most recent one
+    last_message_id = message.message_id
+    
     input_text = message.text.replace(' ', '_')
 
     local_url = url + f'index.php?page=post&s=list&tags={input_text}'
