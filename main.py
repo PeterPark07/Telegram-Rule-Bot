@@ -1,5 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
+import os
+from flask import Flask, request
+import telebot
+
+app = Flask(__name__)
+bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
+bot.set_webhook(url=os.getenv('url2'))
+
+@app.route('/', methods=['POST'])
+def telegram():
+    # Process incoming updates from Telegram
+    if request.headers.get('content-type') == 'application/json':
+        bot.process_new_updates([telebot.types.Update.de_json(request.get_data().decode('utf-8'))])
+        return 'OK', 200
+
 
 # Step 1: Get the URL from the user
 url = os.getenv('url')
