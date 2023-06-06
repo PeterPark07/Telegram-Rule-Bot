@@ -52,7 +52,8 @@ def images(message):
             if counter == 10:  # Break the loop when counter reaches 10
                 break
         if links != "":
-            bot.reply_to(message, links)
+            sent_message = bot.reply_to(message, links)
+            message_ids.append(sent_message.message_id)
             images = []
             for i in links.splitlines():
                 # Send a request to the absolute URL
