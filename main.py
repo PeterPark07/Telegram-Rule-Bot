@@ -51,8 +51,27 @@ def images(message):
                 counter += 1  # Increment the counter
             if counter == 10:  # Break the loop when counter reaches 10
                 break
+        if links != "":
+            bot.reply_to(message, links)
+            images = []
+            for i in links:
+            # Send a request to the absolute URL
+            img_response = requests.get(i, headers=headers)
+            if img_response.status_code == 200:
+                img_soup = BeautifulSoup(img_response.text, 'html.parser')
 
-        bot.reply_to(message, links)
+                # Find all <img> tags with id="image"
+                img_tags = img_soup.find_all('img', id='image')
+                for img in img_tags:
+                    # Remove the query string from the image URL
+                    img_src = img['src'].split('?', 1)[0]
+
+                    images.append(img_src)
+            bot.send_photo(message.chat.id, images[0])
+            else:
+                print(f"Failed to fetch website: {absolute_url}")
+        else:
+            bot.reply_to(message, "no results")
     else:
         bot.reply_to(message, "Failed to fetch website")
 
