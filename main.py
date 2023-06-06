@@ -26,8 +26,8 @@ def telegram():
 def images(message):
     input_text = message.text.split(' ')[0]
     global url
-    local_url = url + f'index.php?page=post&s=list&tags={input_text}'
-    bot.reply_to(message , local_url)
+    local_url = url + f'/index.php?page=post&s=list&tags={input_text}'
+    bot.reply_to(message, local_url)
     response = requests.get(local_url, headers=headers)
 
     # Step 4: Check if the request was successful (status code 200)
@@ -38,12 +38,20 @@ def images(message):
         # Step 6: Find all the <img> tags in the HTML
         img_tags = soup.find_all('img')
         links = ""
+        counter = 0  # Counter variable for limiting the number of links
+
         # Step 7: Extract the src attribute from each img tag and display them
         for img in img_tags:
             src = img.get('src')
             absolute_url = requests.compat.urljoin(local_url, src)
             links += absolute_url
             links += '\n'
-        bot.reply_to(message , links)
+            counter += 1  # Increment the counter
+
+            if counter == 10:  # Break the loop when counter reaches 10
+                break
+
+        bot.reply_to(message, links)
     else:
-        bot.reply_to(message , f"Failed to fetch website")
+        bot.reply_to(message, "Failed to fetch website")
+
