@@ -57,7 +57,7 @@ def extract_image_urls(links, score_threshold):
             img_tags = img_soup.find_all('img', id='image')
             for img in img_tags:
                 img_src = img['src'].split('?', 1)[0]
-                score = int(img_soup.find('span', id='psc' + img_src.split('?')[-1]).text)
+                score = int(img_soup.find('span', id='psc' + img['src'].split('?')[-1]).text)
                 if score >= score_threshold:
                     images.append(img_src)
     return images
