@@ -44,12 +44,17 @@ def images(message):
     last_message_id = message.message_id
     
     input_text = message.text.replace(' ', '_')
-
-    local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
+    
+    if input_text.startswith('more_'):
+        input_text = input_text.replace('more_','')
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=25'
+    else:
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
+        
     response = requests.get(local_url, headers=headers)
 
     if response.status_code == 200:
-        links = get_links(10, response)
+        links = get_links(25, response)
 
         if links != "":
             images = get_image_urls(links)
