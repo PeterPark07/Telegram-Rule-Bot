@@ -64,8 +64,8 @@ def handle_callback_query(call):
             mode_info = int(call.data.replace('mode',''))
             global mode
             mode = modes[mode_info - 1]
-            bot.answer_callback_query(call.id, f"Mode changed to {mode+1}")
-            bot.send_message(call.message.chat.id, f"Mode changed to {mode+1}")
+            bot.answer_callback_query(call.id, f"Mode changed to {mode_info}")
+            bot.send_message(call.message.chat.id, f"Mode changed to {mode_info}")
         
         # Edit the original message to remove the inline keyboard
         bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
