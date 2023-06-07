@@ -33,12 +33,12 @@ def handle_settings(message):
     markup = telebot.types.InlineKeyboardMarkup()
     
     # Add button to change number_images
-    number_images_options = [5, 10, 20, 30, 40]
+    number_images_options = ['2 images', '5 images', '10 images', '20 images', '30 images', '40 images']
     number_images_buttons = []
     for option in number_images_options:
         number_images_buttons.append(telebot.types.InlineKeyboardButton(str(option), callback_data=f"num{option}"))
-    markup.row(*number_images_buttons)
-    
+    markup.row(*number_images_buttons[0:3])
+    markup.row(*number_images_buttons[3:6])
     # Add button to change mode
     mode_options = [("Mode 1 (timeout = 2 seconds)", 1), ("Mode 2 (timeout = 5 seconds)", 2), ("Mode 3 (timeout = 20 seconds)", 3), ("Mode 4 (timeout = 60 seconds)", 4)]
     mode_buttons = []
@@ -55,7 +55,7 @@ def handle_callback_query(call):
         # Callback for changing number_images
         if call.data.startswith("num"):
             global number_images
-            number_images = int(call.data.replace("num" , ''))
+            number_images = int((call.data.replace("num" , '').split()[0])
             bot.answer_callback_query(call.id, f"Number of images set to {number_images}")
             bot.send_message(call.message.chat.id, f"Number of images changed to {number_images}")
         
@@ -84,13 +84,7 @@ def images(message):
     
     input_text = message.text.replace(' ', '_')
     
-    if input_text.startswith('/more'):
-        input_text = input_text.replace('/more','')
-        num = int(input_text[0]) * number_images
-        input_text = input_text[2:]
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
-    else:
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
+    local_url = get_local_url(input_text)
         
     response = requests.get(local_url, headers=headers)
 
@@ -108,6 +102,16 @@ def images(message):
     schedule_message_deletion(message, message_ids , mode)
     return
 
+
+def get_local_url(input_text):
+    if input_text.startswith('/more'):
+        input_text = input_text.replace('/more','')
+        num = int(input_text[0]) * number_images
+        input_text = input_text[2:]
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
+    else:
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
+    return local_url
 
 
 def get_links(counter, response):
