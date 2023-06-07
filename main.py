@@ -82,7 +82,7 @@ def images(message):
 
     input_text = message.text.replace(' ', '_')
 
-    local_url = construct_local_url(input_text, number_images)
+    local_url, input_text, last_pageid = construct_local_url(input_text, number_images)
 
     response = requests.get(local_url, headers=headers)
 
@@ -92,6 +92,7 @@ def images(message):
         if links :
             images = extract_image_urls(links)
             send_images(message.chat.id, images, message_ids)
+            bot.reply_to(message, f"/more{last_pageid+1}_{input_text}")
         else:
             bot.reply_to(message, "No results")
     else:
