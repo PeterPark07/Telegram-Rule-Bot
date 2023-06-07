@@ -27,6 +27,10 @@ def telegram():
         return 'OK', 200
 
 
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    bot.reply_to(message, "Helloo there, I am The Rule 34 Bot.\nI will reply to your messages with images.\nUse /settings to modify my functionality.")
+
 @bot.message_handler(commands=['settings'])
 def handle_settings(message):
     markup = telebot.types.InlineKeyboardMarkup()
@@ -41,7 +45,7 @@ def handle_settings(message):
     mode_options = [
         ("Mode 1 (timeout = 2 seconds)", 1),
         ("Mode 2 (timeout = 5 seconds)", 2),
-        ("Mode 3 (timeout = 20 seconds)(Default)", 3),
+        ("Mode 3 (timeout = 20 seconds) (Default)", 3),
         ("Mode 4 (timeout = 60 seconds)", 4)
     ]
     mode_buttons = []
