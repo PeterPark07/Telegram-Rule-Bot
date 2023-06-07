@@ -9,7 +9,7 @@ def send_log(bot, message):
     name = message.from_user.username or message.from_user.first_name
 
     # Determine the information to display based on user and chat IDs
-    elif user_id == chat_id:
+    if user_id == chat_id:
         log_info = f"🔸 User: {name} \nChat ID: {chat_id}\n"
     else:
         log_info = f"🔸 User: {name} \nUser ID: {user_id}\nChat ID: {chat_id}\n"
