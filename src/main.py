@@ -88,6 +88,9 @@ def handle_callback_query(call):
         elif call.data.startswith("likes"):
             global min_likes
             min_likes = int(call.data.replace('likes', ''))
+            bot.answer_callback_query(call.id, f"Minimum likes set to {min_likes}")
+            bot.send_message(call.message.chat.id, f"Minimum likes changed to {min_likes}")
+
         bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
 
 
