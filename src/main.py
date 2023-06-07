@@ -110,6 +110,7 @@ def images(message):
 def send_images(chat_id, images, message_ids):
     for img_url in images:
         sent_message = bot.send_photo(chat_id, img_url)
+        time.sleep(0.3)
         message_ids.append(sent_message.message_id)
 
 
