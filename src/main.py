@@ -35,6 +35,7 @@ def handle_start(message):
 
 @bot.message_handler(commands=['settings'])
 def handle_settings(message):
+    send_log(bot, message)
     markup = telebot.types.InlineKeyboardMarkup()
 
     number_images_options = ['2 images', '5 images', '10 images (default)', '20 images', '30 images', '40 images']
