@@ -15,16 +15,16 @@ def construct_local_url(input_text, number_images):
     if input_text.startswith('/more'):
         input_text = input_text.replace('/more', '')
         try:
-            num = int(input_text[0]) 
+            page_id = int(input_text[0]) 
             input_text = input_text[2:]
-            local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num*number_images}'
+            local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={page_id*number_images}'
         except:
             local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
-            num = 0
+            page_id = 0
     else:
         local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
-        num = 0
-    return local_url, num
+        page_id = 0
+    return local_url, input_text, page_id
 
 def extract_links(counter, response):
     """
