@@ -94,7 +94,7 @@ def images(message):
         links = extract_links(number_images, response)
 
         if links :
-            images = extract_image_urls(links)
+            images = extract_image_urls(links, min_likes)
             send_images(message.chat.id, images, message_ids)
             bot.reply_to(message, f"/more{last_pageid+1}_{input_text}")
         else:
