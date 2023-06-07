@@ -118,9 +118,10 @@ def images(message):
             bot.reply_to(message, f"/more{last_pageid+1}_{input_text}")
         else:
             bot.reply_to(message, "No results")
+            return
     else:
         bot.reply_to(message, "No results")
-
+        return
     schedule_message_deletion(message, message_ids, mode)
     return
 
