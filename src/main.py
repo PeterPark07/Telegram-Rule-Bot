@@ -100,7 +100,7 @@ def images(message):
         else:
             bot.reply_to(message, "No results")
     else:
-        bot.reply_to(message, "Failed to fetch website")
+        bot.reply_to(message, "No results")
 
     schedule_message_deletion(message, message_ids, mode)
     return
