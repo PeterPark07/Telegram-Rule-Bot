@@ -72,7 +72,8 @@ def trending_list():
     tags = ""  # String to store the tags
     
     for row in rows[2:]:
+        rank = row.find_all('td')[0].text.strip()[1:]
         tag = row.find_all('td')[1].text.strip()
-        tags += tag + "\n"  # Add the tag to the tags string with a new line
+        tags += rank + '. ' + '/tag_' + tag + "\n"  # Add the tag to the tags string with a new line
     
     return tags  # Return the string of tags
