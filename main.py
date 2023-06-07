@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
-from helper.functions import get_local_url, get_links, get_image_urls
+from helper.functions import construct_local_url, extract_links, extract_image_urls
 from flask import Flask, request
 import telebot
 import time
@@ -83,15 +83,15 @@ def images(message):
 
     input_text = message.text.replace(' ', '_')
 
-    local_url = get_local_url(input_text, number_images)
+    local_url = construct_local_url(input_text, number_images)
 
     response = requests.get(local_url, headers=headers)
 
     if response.status_code == 200:
-        links = get_links(number_images, response)
+        links = extract_links(number_images, response)
 
         if links != "":
-            images = get_image_urls(links)
+            images = extract_image_urls(links)
             send_images(message.chat.id, images, message_ids)
         else:
             bot.reply_to(message, "No results")
