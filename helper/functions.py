@@ -21,6 +21,10 @@ def construct_local_url(input_text, number_images):
         except:
             local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
             page_id = 0
+    elif input_text.startswith('/tag_'):
+        input_text = input_text.replace('/tag_', '')
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
+        page_id = 0
     else:
         local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
         page_id = 0
