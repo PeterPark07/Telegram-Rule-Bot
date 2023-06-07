@@ -18,11 +18,10 @@ headers = {
     'Accept-Language': 'en-US,en;q=0.9',
 }
 
-message_ids = []  # List to store message IDs
+message_ids = []
 
 @app.route('/', methods=['POST'])
 def telegram():
-    # Process incoming updates from Telegram
     if request.headers.get('content-type') == 'application/json':
         bot.process_new_updates([telebot.types.Update.de_json(request.get_data().decode('utf-8'))])
         return 'OK', 200
@@ -41,8 +40,12 @@ def handle_settings(message):
     markup.row(*number_images_buttons[3:6])
     
     # Add button to change mode
-    mode_options = [("Mode 1 (timeout = 2 seconds)", 1), ("Mode 2 (timeout = 5 seconds)", 2),
-                    ("Mode 3 (timeout = 20 seconds)", 3), ("Mode 4 (timeout = 60 seconds)", 4)]
+    mode_options = [
+        ("Mode 1 (timeout = 2 seconds)", 1),
+        ("Mode 2 (timeout = 5 seconds)", 2),
+        ("Mode 3 (timeout = 20 seconds)", 3),
+        ("Mode 4 (timeout = 60 seconds)", 4)
+    ]
     mode_buttons = []
     for option in mode_options:
         mode_buttons.append(telebot.types.InlineKeyboardButton(option[0], callback_data=f"mode{option[1]}"))
@@ -78,11 +81,9 @@ def handle_callback_query(call):
 def images(message):
     global last_message_id
 
-    # Check if this is the same message as the previous one
     if last_message_id == message.message_id:
         return
 
-    # Store the current message ID as the most recent one
     last_message_id = message.message_id
 
     input_text = message.text.replace(' ', '_')
