@@ -90,7 +90,7 @@ def images(message):
     if response.status_code == 200:
         links = extract_links(number_images, response)
 
-        if links != "":
+        if links :
             images = extract_image_urls(links)
             send_images(message.chat.id, images, message_ids)
         else:
