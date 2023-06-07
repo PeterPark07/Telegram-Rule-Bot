@@ -61,3 +61,18 @@ def extract_image_urls(links, score_threshold):
                 if score >= score_threshold:
                     images.append(img_src)
     return images
+
+def trending_list():
+    tags_url = url + 'index.php?page=toptags'
+    response = requests.get(tags_url, headers=headers)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    table = soup.find('table', class_='server-assigns')
+    rows = table.find_all('tr')
+    
+    tags = ""  # String to store the tags
+    
+    for row in rows[1:]:
+        tag = row.find_all('td')[1].text.strip()
+        tags += tag + "\n"  # Add the tag to the tags string with a new line
+    
+    return tags  # Return the string of tags
