@@ -49,21 +49,7 @@ def images(message):
     response = requests.get(local_url, headers=headers)
 
     if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        links = ""
-        counter =40
-
-        a_tags = soup.find_all('a')
-
-        for a in a_tags:
-            href = a.get('href')
-            if 's=view' in href:
-                absolute_url = requests.compat.urljoin(url, href)
-                links += absolute_url
-                links += '\n'
-                counter -= 1
-            if counter == 0:
-                break
+        links = get_links(10, response)
 
         if links != "":
             images = get_image_urls(links)
@@ -79,7 +65,25 @@ def images(message):
     schedule_message_deletion(message, message_ids)
     return
 
-    
+
+
+def get_links(counter, response)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    links = ""
+
+    a_tags = soup.find_all('a')
+
+    for a in a_tags:
+        href = a.get('href')
+        if 's=view' in href:
+            absolute_url = requests.compat.urljoin(url, href)
+            links += absolute_url
+            links += '\n'
+            counter -= 1
+        if counter == 0:
+            break
+    return links
+
 def get_image_urls(links):
     images = []
     for i in links.splitlines():
