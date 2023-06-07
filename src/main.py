@@ -8,6 +8,7 @@ import time
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
+bot.set_webhook(url = os.getenv('url2'))
 number_images = 10
 modes = [[2, 0.2], [5, 0.5], [20, 2], [60, 5]]
 mode = modes[0]
