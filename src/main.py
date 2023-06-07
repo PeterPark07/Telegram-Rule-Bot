@@ -43,10 +43,10 @@ def handle_settings(message):
     markup.row(*number_images_buttons[3:6])
     
     mode_options = [
-        ("Mode 1 (timeout = 2 seconds)", 1),
-        ("Mode 2 (timeout = 5 seconds)", 2),
-        ("Mode 3 (timeout = 20 seconds) (Default)", 3),
-        ("Mode 4 (timeout = 60 seconds)", 4)
+        ("Timeout = 2 seconds", 1),
+        ("Timeout = 5 seconds", 2),
+        ("Timeout = 20 seconds (Default)", 3),
+        ("Timeout = 60 seconds", 4)
     ]
     mode_buttons = []
     for option in mode_options:
