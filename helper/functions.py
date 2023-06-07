@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+import os
 
 url = os.getenv('url')
 headers = {
@@ -8,7 +9,10 @@ headers = {
     'Accept-Language': 'en-US,en;q=0.9',
 }
 
-def get_local_url(input_text, number_images):
+def construct_local_url(input_text, number_images):
+    """
+    Constructs the local URL based on the input text and number of images.
+    """
     if input_text.startswith('/more'):
         input_text = input_text.replace('/more', '')
         num = int(input_text[0]) * number_images
@@ -18,7 +22,10 @@ def get_local_url(input_text, number_images):
         local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
     return local_url
 
-def get_links(counter, response):
+def extract_links(counter, response):
+    """
+    Extracts the links from the response HTML based on the counter.
+    """
     soup = BeautifulSoup(response.text, 'html.parser')
     links = ""
 
@@ -35,10 +42,13 @@ def get_links(counter, response):
             break
     return links
 
-def get_image_urls(links):
+def extract_image_urls(links):
+    """
+    Extracts the image URLs from the given links.
+    """
     images = []
-    for i in links.splitlines():
-        img_response = requests.get(i, headers=headers)
+    for link in links.splitlines():
+        img_response = requests.get(link, headers=headers)
         if img_response.status_code == 200:
             img_soup = BeautifulSoup(img_response.text, 'html.parser')
             img_tags = img_soup.find_all('img', id='image')
