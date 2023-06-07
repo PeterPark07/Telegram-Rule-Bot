@@ -31,6 +31,7 @@ def telegram():
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
+    send_log(bot, message)
     bot.reply_to(message, "Helloo there, I am The Rule 34 Bot 🔞. I will reply to your messages with images.\n\nUse /settings to modify my functionality.")
 
 @bot.message_handler(commands=['settings'])
