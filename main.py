@@ -64,7 +64,7 @@ def images(message):
 
 
 
-def get_links(counter, response)
+def get_links(counter, response):
     soup = BeautifulSoup(response.text, 'html.parser')
     links = ""
 
