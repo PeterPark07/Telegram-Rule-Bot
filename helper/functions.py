@@ -50,7 +50,7 @@ def extract_image_urls(links, score_threshold):
     Extracts the image URLs from the given links, filtering out images below the score threshold.
     """
     images = []
-    for link in links.splitlines():
+    for link in links:
         img_response = requests.get(link, headers=headers)
         if img_response.status_code == 200:
             img_soup = BeautifulSoup(img_response.text, 'html.parser')
