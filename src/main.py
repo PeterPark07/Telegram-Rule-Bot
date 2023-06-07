@@ -10,7 +10,7 @@ bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
 number_images = 10
 modes = [[2, 0.2], [5, 0.5], [20, 2], [60, 5]]
-mode = modes[0]
+mode = modes[2]
 last_message_id = None
 
 headers = {
@@ -31,7 +31,7 @@ def telegram():
 def handle_settings(message):
     markup = telebot.types.InlineKeyboardMarkup()
 
-    number_images_options = ['2 images', '5 images', '10 images', '20 images', '30 images', '40 images']
+    number_images_options = ['2 images', '5 images', '10 images (default)', '20 images', '30 images', '40 images']
     number_images_buttons = []
     for option in number_images_options:
         number_images_buttons.append(telebot.types.InlineKeyboardButton(str(option), callback_data=f"num{option}"))
@@ -41,7 +41,7 @@ def handle_settings(message):
     mode_options = [
         ("Mode 1 (timeout = 2 seconds)", 1),
         ("Mode 2 (timeout = 5 seconds)", 2),
-        ("Mode 3 (timeout = 20 seconds)", 3),
+        ("Mode 3 (timeout = 20 seconds)(Default)", 3),
         ("Mode 4 (timeout = 60 seconds)", 4)
     ]
     mode_buttons = []
