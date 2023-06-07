@@ -1,6 +1,6 @@
 import requests
 import os
-from helper.functions import construct_local_url, extract_links, extract_image_urls
+from helper.functions import construct_local_url, extract_links, extract_image_urls, trending_list
 from helper.log import send_log
 from flask import Flask, request
 import telebot
@@ -71,7 +71,6 @@ def handle_settings(message):
     
     bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
 
-
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback_query(call):
     if call.message:
@@ -95,6 +94,12 @@ def handle_callback_query(call):
             bot.send_message(call.message.chat.id, f"Minimum likes changed to {min_likes}")
 
         bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
+
+        
+@bot.message_handler(commands=['trending'])
+def handle_start(message):
+    send_log(bot, message)
+    bot.reply_to(message, trending_list())
 
 
 @bot.message_handler(func=lambda message: True)
