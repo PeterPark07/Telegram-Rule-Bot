@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 import os
 from helper.functions import construct_local_url, extract_links, extract_image_urls
 from flask import Flask, request
