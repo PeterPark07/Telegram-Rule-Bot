@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+from helper.functions import get_local_url, get_links, get_image_urls
 from flask import Flask, request
 import telebot
 import time
@@ -8,7 +9,7 @@ import time
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
-number_images = 15
+number_images = 10
 modes = [[2, 0.2], [5, 0.5], [20, 2], [60, 5]]
 mode = modes[0]
 last_message_id = None
@@ -82,7 +83,7 @@ def images(message):
 
     input_text = message.text.replace(' ', '_')
 
-    local_url = get_local_url(input_text)
+    local_url = get_local_url(input_text, number_images)
 
     response = requests.get(local_url, headers=headers)
 
@@ -100,47 +101,6 @@ def images(message):
     schedule_message_deletion(message, message_ids, mode)
     return
 
-
-def get_local_url(input_text):
-    if input_text.startswith('/more'):
-        input_text = input_text.replace('/more', '')
-        num = int(input_text[0]) * number_images
-        input_text = input_text[2:]
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
-    else:
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
-    return local_url
-
-
-def get_links(counter, response):
-    soup = BeautifulSoup(response.text, 'html.parser')
-    links = ""
-
-    a_tags = soup.find_all('a')
-
-    for a in a_tags:
-        href = a.get('href')
-        if 's=view' in href:
-            absolute_url = requests.compat.urljoin(url, href)
-            links += absolute_url
-            links += '\n'
-            counter -= 1
-        if counter == 0:
-            break
-    return links
-
-
-def get_image_urls(links):
-    images = []
-    for i in links.splitlines():
-        img_response = requests.get(i, headers=headers)
-        if img_response.status_code == 200:
-            img_soup = BeautifulSoup(img_response.text, 'html.parser')
-            img_tags = img_soup.find_all('img', id='image')
-            for img in img_tags:
-                img_src = img['src'].split('?', 1)[0]
-                images.append(img_src)
-    return images
 
 
 def send_images(chat_id, images, message_ids):
