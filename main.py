@@ -9,7 +9,7 @@ app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot'), threaded=False)
 url = os.getenv('url')
 number_images = 15
-modes = [[5, 0.5] , [20, 2 ] , [60 , 5 ]]
+modes = [[2,0.2], [5, 0.5] , [20, 2 ] , [60 , 5 ]]
 mode = modes[0]
 last_message_id = None
 
@@ -33,19 +33,19 @@ def handle_settings(message):
     markup = telebot.types.InlineKeyboardMarkup()
     
     # Add button to change number_images
-    number_images_options = [5, 10, 15, 20, 25, 30]
+    number_images_options = [5, 10, 20, 30, 40]
     number_images_buttons = []
     for option in number_images_options:
-        number_images_buttons.append(telebot.types.InlineKeyboardButton(str(option), callback_data=f"num_{option}"))
+        number_images_buttons.append(telebot.types.InlineKeyboardButton(str(option), callback_data=f"num{option}"))
     markup.row(*number_images_buttons)
     
     # Add button to change mode
-    mode_options = [("Mode 1", 5, 0.5), ("Mode 2", 20, 2), ("Mode 3", 60, 5)]
+    mode_options = [("Mode 1 (timeout = 2 seconds)", 1), ("Mode 2 (timeout = 5 seconds)", 2), ("Mode 3 (timeout = 20 seconds)", 3), ("Mode 4 (timeout = 60 seconds)", 4)]
     mode_buttons = []
     for option in mode_options:
-        mode_buttons.append(telebot.types.InlineKeyboardButton(option[0], callback_data=f"mode{option[0]}"))
-    markup.row(*mode_buttons)
-    
+        mode_buttons.append(telebot.types.InlineKeyboardButton(option[0], callback_data=f"mode{option[1]}"))
+    markup.row(*mode_buttons[0:2])
+    markup.row(*mode_buttons[2:4])
     bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
 
 
@@ -55,13 +55,13 @@ def handle_callback_query(call):
         # Callback for changing number_images
         if call.data.startswith("num"):
             global number_images
-            number_images = int(call.data.split("_")[1])
+            number_images = int(call.data.replace("num" , ''))
             bot.answer_callback_query(call.id, f"Number of images set to {number_images}")
             bot.send_message(call.message.chat.id, f"Number of images changed to {number_images}")
         
         # Callback for changing mode
         elif call.data.startswith("mode"):
-            mode_info = int(call.data.replace('modeMode ',''))
+            mode_info = int(call.data.replace('mode',''))
             global mode
             mode = modes[mode_info - 1]
             bot.answer_callback_query(call.id, f"Mode changed to {mode+1}")
