@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import time
 import os
 
 url = os.getenv('url')
@@ -27,7 +26,7 @@ def extract_links(counter, response):
     Extracts the links from the response HTML based on the counter.
     """
     soup = BeautifulSoup(response.text, 'html.parser')
-    links = ""
+    links = []
 
     a_tags = soup.find_all('a')
 
@@ -35,8 +34,7 @@ def extract_links(counter, response):
         href = a.get('href')
         if 's=view' in href:
             absolute_url = requests.compat.urljoin(url, href)
-            links += absolute_url
-            links += '\n'
+            links.append(absolute_url)
             counter -= 1
         if counter == 0:
             break
@@ -46,13 +44,5 @@ def extract_image_urls(links):
     """
     Extracts the image URLs from the given links.
     """
-    images = []
-    for link in links.splitlines():
-        img_response = requests.get(link, headers=headers)
-        if img_response.status_code == 200:
-            img_soup = BeautifulSoup(img_response.text, 'html.parser')
-            img_tags = img_soup.find_all('img', id='image')
-            for img in img_tags:
-                img_src = img['src'].split('?', 1)[0]
-                images.append(img_src)
+    images = [img['src'].split('?', 1)[0] for link in links for img in BeautifulSoup(requests.get(link, headers=headers).text, 'html.parser').find_all('img', id='image')]
     return images
