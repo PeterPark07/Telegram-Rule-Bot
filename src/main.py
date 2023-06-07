@@ -97,7 +97,7 @@ def handle_callback_query(call):
 
 @bot.message_handler(func=lambda message: True)
 def images(message):
-    send_log(bot, message):
+    send_log(bot, message)
     global last_message_id
 
     if last_message_id == message.message_id:
