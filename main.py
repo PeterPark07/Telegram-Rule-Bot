@@ -53,10 +53,7 @@ def images(message):
 
         if links != "":
             images = get_image_urls(links)
-            if len(images) != 0:
-                send_images(message.chat.id, images, message_ids)
-            else:
-                bot.reply_to(message, "No results")
+            send_images(message.chat.id, images, message_ids)
         else:
             bot.reply_to(message, "No results")
     else:
@@ -111,8 +108,8 @@ def schedule_message_deletion(message, message_ids):
             bot.delete_message(message.chat.id, message_id)
         message_ids.clear()
     else:
-        time.sleep(20)
+        time.sleep(5)
         for message_id in message_ids:
-            time.sleep(1)
+            time.sleep(0.5)
             bot.delete_message(message.chat.id, message_id)
         message_ids.clear()
