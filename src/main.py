@@ -11,6 +11,7 @@ url = os.getenv('url')
 number_images = 10
 modes = [[2, 0.2], [5, 0.5], [20, 2], [60, 5]]
 mode = modes[2]
+min_likes = 0
 last_message_id = None
 
 headers = {
@@ -53,6 +54,17 @@ def handle_settings(message):
         mode_buttons.append(telebot.types.InlineKeyboardButton(option[0], callback_data=f"mode{option[1]}"))
     markup.row(*mode_buttons[0:2])
     markup.row(*mode_buttons[2:4])
+
+    min_likes_options = [
+        ("Min Likes = 0 (Default)", 0),
+        ("Min Likes = 1", 1),
+        ("Min Likes = 5", 5),
+        ("Min Likes = 20", 20)
+    ]
+    min_likes_buttons = []
+    for option in min_likes_options:
+        min_likes_buttons.append(telebot.types.InlineKeyboardButton(option[0], callback_data=f"likes{option[1]}"))
+    markup.row(*min_likes_buttons)
     
     bot.send_message(message.chat.id, "Choose an option:", reply_markup=markup)
 
@@ -72,6 +84,10 @@ def handle_callback_query(call):
             mode = modes[mode_info - 1]
             bot.answer_callback_query(call.id, f"Mode changed to {mode_info}")
             bot.send_message(call.message.chat.id, f"Mode changed to {mode_info}")
+
+        elif call.data.startswith("likes"):
+            global min_likes
+            min_likes = int(call.data.replace('likes', ''))
         bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
 
 
