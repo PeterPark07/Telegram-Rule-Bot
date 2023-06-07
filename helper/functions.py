@@ -14,9 +14,12 @@ def construct_local_url(input_text, number_images):
     """
     if input_text.startswith('/more'):
         input_text = input_text.replace('/more', '')
-        num = int(input_text[0]) * number_images
-        input_text = input_text[2:]
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
+        try:
+            num = int(input_text[0]) * number_images
+            input_text = input_text[2:]
+            local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
+        except:
+            local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
     else:
         local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
     return local_url
