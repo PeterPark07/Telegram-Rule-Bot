@@ -31,7 +31,6 @@ def telegram():
 def handle_settings(message):
     markup = telebot.types.InlineKeyboardMarkup()
 
-    # Add button to change number_images
     number_images_options = ['2 images', '5 images', '10 images', '20 images', '30 images', '40 images']
     number_images_buttons = []
     for option in number_images_options:
@@ -39,7 +38,6 @@ def handle_settings(message):
     markup.row(*number_images_buttons[0:3])
     markup.row(*number_images_buttons[3:6])
     
-    # Add button to change mode
     mode_options = [
         ("Mode 1 (timeout = 2 seconds)", 1),
         ("Mode 2 (timeout = 5 seconds)", 2),
@@ -58,22 +56,18 @@ def handle_settings(message):
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callback_query(call):
     if call.message:
-        # Callback for changing number_images
         if call.data.startswith("num"):
             global number_images
             number_images = int(call.data.replace("num", '').split()[0])
             bot.answer_callback_query(call.id, f"Number of images set to {number_images}")
             bot.send_message(call.message.chat.id, f"Number of images changed to {number_images}")
 
-        # Callback for changing mode
         elif call.data.startswith("mode"):
             mode_info = int(call.data.replace('mode', ''))
             global mode
             mode = modes[mode_info - 1]
             bot.answer_callback_query(call.id, f"Mode changed to {mode_info}")
             bot.send_message(call.message.chat.id, f"Mode changed to {mode_info}")
-
-        # Edit the original message to remove the inline keyboard
         bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
 
 
