@@ -45,9 +45,11 @@ def images(message):
     
     input_text = message.text.replace(' ', '_')
     
-    if input_text.startswith('more_'):
-        input_text = input_text.replace('more_','')
-        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=25'
+    if input_text.startswith('/more'):
+        input_text = input_text.replace('/more','')
+        num = int(input_text[0]) * 25
+        input_text = input_text[2:]
+        local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid={num}'
     else:
         local_url = url + f'index.php?page=post&s=list&tags={input_text}&pid=0'
         
