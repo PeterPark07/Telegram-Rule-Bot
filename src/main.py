@@ -1,7 +1,7 @@
 import requests
 import os
 from helper.functions import construct_local_url, extract_links, extract_image_urls, trending_list
-from helper.log import send_log
+from helper.log import log
 from flask import Flask, request
 import telebot
 import time
@@ -31,12 +31,12 @@ def telegram():
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    send_log(bot, message)
+    log(message)
     bot.reply_to(message, "Helloo there, I am The Rule 34 Bot 🔞. I will reply to your messages with images.\nGet trending tags using /trending.\n\nUse /settings to modify my functionality.")
 
 @bot.message_handler(commands=['settings'])
 def handle_settings(message):
-    send_log(bot, message)
+    log(message)
     markup = telebot.types.InlineKeyboardMarkup()
 
     number_images_options = ['2 images', '5 images', '10 images (default)', '20 images', '30 images', '40 images']
@@ -98,13 +98,13 @@ def handle_callback_query(call):
         
 @bot.message_handler(commands=['trending'])
 def handle_start(message):
-    send_log(bot, message)
+    log(message)
     bot.reply_to(message, trending_list())
 
 
 @bot.message_handler(func=lambda message: True)
 def images(message):
-    send_log(bot, message)
+    log(message)
     global last_message_id
 
     if last_message_id == message.message_id:
